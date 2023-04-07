@@ -244,17 +244,96 @@ public class Main {
     }
 }
 ```
-
+### Фасад
 Паттерн "Фасад" (Facade) - предоставляет унифицированный интерфейс для доступа к набору интерфейсов в подсистеме. Этот паттерн обеспечивает простой интерфейс для сложных систем и позволяет скрыть детали реализации.
+```java 
+public class CarEngineFacade {
+    private Car car;
+    private Engine engine;
+    private FuelInjector fuelInjector;
 
+    public CarEngineFacade(Car car, Engine engine, FuelInjector fuelInjector) {
+        this.car = car;
+        this.engine = engine;
+        this.fuelInjector = fuelInjector;
+    }
+
+    public void startCar() {
+        car.start();
+        engine.start();
+        fuelInjector.on();
+    }
+
+    public void stopCar() {
+        fuelInjector.off();
+        engine.stop();
+        car.stop();
+    }
+}
+```
+
+### Адаптер
 Паттерн "Адаптер" (Adapter) - позволяет объектам с несовместимыми интерфейсами работать вместе. Адаптер представляет собой посредника между двумя объектами, переводя вызовы методов одного объекта в вызовы, понятные для другого.
+```java 
+public interface MediaPlayer {
+    public void play(String audioType, String fileName);
+}
 
+public interface AdvancedMediaPlayer {
+    public void playMp4(String fileName);
+    public void playAvi(String fileName);
+}
+
+public class Mp4Player implements AdvancedMediaPlayer {
+    public void playMp4(String fileName) {
+        System.out.println("Playing MP4 file: " + fileName);
+    }
+    public void playAvi(String fileName) {
+        // do nothing
+    }
+}
+
+public class AviPlayer implements AdvancedMediaPlayer {
+    public void playMp4(String fileName) {
+        // do nothing
+    }
+    public void playAvi(String fileName) {
+        System.out.println("Playing AVI file: " + fileName);
+    }
+}
+
+public class MediaPlayerAdapter implements MediaPlayer {
+    AdvancedMediaPlayer advancedMediaPlayer;
+
+    public MediaPlayerAdapter(String audioType) {
+        if (audioType.equalsIgnoreCase("mp4")) {
+            advancedMediaPlayer = new Mp4Player();
+        } else if (audioType.equalsIgnoreCase("avi")) {
+            advancedMediaPlayer = new AviPlayer();
+        }
+    }
+
+    public void play(String audioType, String fileName) {
+        if (audioType.equalsIgnoreCase("mp4")) {
+            advancedMediaPlayer.playMp4(fileName);
+        } else if (audioType.equalsIgnoreCase("avi")) {
+            advancedMediaPlayer.playAvi(fileName);
+        }
+    }
+}
+
+```
+### Декоратор
 Паттерн "Декоратор" (Decorator) - позволяет динамически добавлять новые функции к объекту без изменения его кода. Декоратор оборачивает объект в другой объект, который может добавлять новые функции или изменять поведение существующих функций.
 
+### Компоновщик
 Паттерн "Компоновщик" (Composite) - объединяет объекты в древовидную структуру для представления иерархии объектов. Каждый узел в дереве может быть как простым объектом, так и контейнером для других объектов.
 
+### Цепочка обязанностей
 Паттерн "Цепочка обязанностей" (Chain of Responsibility) - позволяет объектам, представляющим различные обработчики, последовательно обрабатывать запросы и передавать их друг другу до тех пор, пока запрос не будет обработан. Каждый обработчик решает, может ли он обработать запрос самостоятельно или должен передать его дальше.
 
+### Шаблонный метод
 Паттерн "Шаблонный метод" (Template Method) - определяет каркас алгоритма в родительском классе, оставляя конкретную реализацию дочерним классам. Этот паттерн позволяет определить общий процесс выполнения операции, при этом оставляя конкретные детали для каждого класса.
 
+### Наблюдатель
 Паттерн "Наблюдатель" (Observer) - позволяет объектам следить за изменениями в других объектах и получать оповещения о них. Этот паттерн используется для создания слабой связи между объектами, что облегчает изменения в одном объекте без влияния на другие объекты.
