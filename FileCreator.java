@@ -7,8 +7,8 @@ import java.nio.file.Files;
 public class FileCreator {
     public static void main(String[] args) throws IOException {
         String[] files = text.split("\n");
-        Files.createFile(new File("README2.md").toPath());
-        FileWriter fileWriter = new FileWriter(new File("README2.md"));
+        Files.createFile(new File("README3.md").toPath());
+        FileWriter fileWriter = new FileWriter(new File("README3.md"));
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
         for (String file: files) {
             String path = file;
@@ -25,7 +25,22 @@ public class FileCreator {
                     bufferedWriter.write(String.format("[%s](/%s)   ", file, path));
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
-
+                } else {
+                    if (file.endsWith(".")) {
+                        path = path.replaceAll("\\?", "");
+                        path = path.replaceAll(",", "");
+                        path = path.replaceAll("\\\\", "");
+                        path = path.replaceAll("/", "|");
+                        path = path.replaceAll("\\.", "");
+                        path = path + ".md";
+                        File test = new File(path);
+                        if (Files.notExists(test.toPath())) {
+                            Files.createFile(test.toPath());
+                        }
+                        bufferedWriter.write(String.format("[%s](/%s)   ", file, path));
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                    }
                 }
             }
         }
@@ -387,5 +402,19 @@ public class FileCreator {
             " \n" +
             "Практические задания\n" +
             "45. Реализовать сервис, который на вход принимает url и возвращает короткую версию (вроде bit.ly/86gfr3).";
+
+    class test {
+        public test() {
+            return;
+        }
+    }
+
+    // Output:
+// Static initializer of Parent
+// Static initializer of Child
+// Instance initializer of Parent
+// Constructor of Parent
+// Instance initializer of Child
+// Constructor of Child
 
 }
